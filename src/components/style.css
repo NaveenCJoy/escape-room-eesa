@@ -4,3 +4,8 @@
   background-image: url("../assets/scene-ge4702fce4_1920.jpg");
   background-size: cover;
 }
+
+.small-container {
+  background-image: url("../assets/background.jpg");
+  background-size: cover;
+}

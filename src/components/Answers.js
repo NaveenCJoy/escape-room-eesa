@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
@@ -8,6 +9,7 @@ import "./style.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+import { createTheme } from "@mui/material/styles";
 
 import { pink, red } from "@mui/material/colors";
 
@@ -35,8 +37,7 @@ const styleTimeout = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 700,
-  height: 300,
+  width: { xs: "90%", lg: 700 },
   bgcolor: "background.paper",
   border: "2px solid #000",
   borderRadius: 5,
@@ -53,6 +54,8 @@ const Answers = () => {
   const [opencorrect, setOpencorrect] = useState(false);
   const [openwrong, setOpenwrong] = useState(false);
   const [opentimeout, setOpentimeout] = useState(false);
+  const theme = createTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleOpen = () => setOpencorrect(true);
   const handleClosecorrect = () => setOpencorrect(false);
@@ -72,14 +75,15 @@ const Answers = () => {
       })
       .then(() => {
         checking = "none";
-        if (answer === "Vibhava") {
+        if (answer === "953975") {
           setOpencorrect(true);
-        } else if (answer === "vibhava") {
-          setOpencorrect(true);
-        } else {
+        }
+        // else if (answer === "953975") {
+        //   setOpencorrect(true);
+        // }
+        else {
           setOpenwrong(true);
         }
-        // alert("Your answer was submitted");
       })
       .catch((error) => {
         alert(error.message);
@@ -89,10 +93,10 @@ const Answers = () => {
     setAnswer("");
   };
 
-  setTimeout(opentimeoutModal, 900000);
+  setTimeout(opentimeoutModal, 900000); // 15 min timeout
 
   return (
-    <div className="main-container">
+    <div className={matchesSM ? "small-container" : "main-container"}>
       {/* wrong modal */}
       <Modal open={openwrong} onClose={handleClosewrong}>
         <Box sx={style}>
@@ -177,21 +181,27 @@ const Answers = () => {
         container
         direction="column"
         alignItems="center"
+        justifyContent="center"
         sx={{ height: "100vh" }}
       >
-        <Grid item align="center" sx={{ mt: "3rem" }}>
+        <Grid item align="center" sx={{ mt: { xs: "-3rem", md: "0rem" } }}>
           <Card
             sx={{
               color: "white",
-              width: "50rem",
-              height: "30rem",
+              width: { lg: "50rem", xs: "90%" },
+              height: { lg: "30rem", xs: "100%" },
               borderRadius: 5,
               display: cardDisplay,
             }}
           >
             <form id="submit-form" onSubmit={handleSubmit}>
               <CardContent>
-                <Typography sx={{ color: "black", fontSize: "5rem" }}>
+                <Typography
+                  sx={{
+                    color: "black",
+                    fontSize: { lg: "5rem", sm: "4rem", xs: "3rem" },
+                  }}
+                >
                   ESCAPE ROOM
                 </Typography>
                 <Typography sx={{ color: "black" }}>
@@ -202,20 +212,22 @@ const Answers = () => {
                 <TextField
                   required
                   id="name"
+                  autoComplete="off"
                   label="Name of Team"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  sx={{ width: "20rem" }}
+                  sx={{ width: { lg: "20rem", xs: "90%" } }}
                 />
               </CardContent>
               <CardContent>
                 <TextField
                   required
                   id="answer"
+                  autoComplete="off"
                   label="Answer"
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
-                  sx={{ width: "20rem" }}
+                  sx={{ width: { lg: "20rem", xs: "90%" } }}
                 />
               </CardContent>
               <CardContent>
