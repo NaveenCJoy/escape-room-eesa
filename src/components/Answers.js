@@ -47,6 +47,23 @@ const styleTimeout = {
 
 let checking = "none";
 let cardDisplay = "block";
+let count = 0;
+let tryoutModal = "none";
+
+const tryOut = {
+  position: "absolute",
+  display: { tryoutModal },
+  // display: "block",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { xs: "90%", lg: 700 },
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  borderRadius: 5,
+  boxShadow: 24,
+  p: 4,
+};
 
 const Answers = () => {
   const [name, setName] = useState("");
@@ -54,6 +71,7 @@ const Answers = () => {
   const [opencorrect, setOpencorrect] = useState(false);
   const [openwrong, setOpenwrong] = useState(false);
   const [opentimeout, setOpentimeout] = useState(false);
+  const [opentry, setOpentry] = useState(false);
   const theme = createTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -67,6 +85,7 @@ const Answers = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    count = count + 1;
     checking = "block";
     db.collection("answers")
       .add({
@@ -75,7 +94,7 @@ const Answers = () => {
       })
       .then(() => {
         checking = "none";
-        if (answer === "953975") {
+        if (answer === "1603") {
           setOpencorrect(true);
         }
         // else if (answer === "953975") {
@@ -93,7 +112,12 @@ const Answers = () => {
     setAnswer("");
   };
 
-  setTimeout(opentimeoutModal, 900000); // 15 min timeout
+  setTimeout(opentimeoutModal, 1200000); // 15 min timeout
+
+  if (count === 10) {
+    cardDisplay = "none";
+    tryoutModal = "block";
+  }
 
   return (
     <div className={matchesSM ? "small-container" : "main-container"}>
@@ -177,6 +201,32 @@ const Answers = () => {
           </Grid>
         </Box>
       </Modal>
+      {/* 10 try */}
+      <Modal open={opentry}>
+        <Box sx={tryOut}>
+          <Grid container direction="column" alignItems="center">
+            <Grid item>
+              {/* <CheckCircleOutlineIcon color="success" sx={{ fontSize: 80 }} /> */}
+            </Grid>
+            <Grid item sx={{ mt: "1rem" }}>
+              <Typography align="center" sx={{ fontWeight: "bold" }}>
+                10 tries over
+              </Typography>
+              <Typography sx={{ mt: "1rem" }}>Please leave the room</Typography>
+            </Grid>
+            <Grid item>
+              <Button
+                onClick={handleClosecorrect}
+                variant="contained"
+                sx={{ maxWidth: "10rem", mt: "2rem", mb: "1rem" }}
+              >
+                Ok
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Modal>
+
       <Grid
         container
         direction="column"
